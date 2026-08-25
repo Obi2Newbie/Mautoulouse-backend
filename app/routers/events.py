@@ -198,6 +198,16 @@ async def attend_event(
         raise HTTPException(status_code=404, detail="Événement introuvable")
 
     ev = event.data
+
+    # ── Block registration for past events ───────────────────
+    from datetime import date
+    event_date = date.fromisoformat(str(ev["date"]))
+    if event_date < date.today():
+        raise HTTPException(status_code=400, detail="Impossible de s'inscrire à un événement passé")
+    if ev.get("status") == "past":
+        raise HTTPException(status_code=400, detail="Impossible de s'inscrire à un événement passé")
+    # ─────────────────────────────────────────────────────────
+
     if payload.status == "going" and ev.get("going_count", 0) >= ev["capacity"]:
         raise HTTPException(status_code=409, detail="L'événement est complet")
 
