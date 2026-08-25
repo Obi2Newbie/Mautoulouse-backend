@@ -6,3 +6,4 @@ pydantic-settings>=2.4.0
 supabase>=2.5.1
 python-multipart>=0.0.9
 Pillow>=11.0.0
+pydantic[email]>=2.7.4
